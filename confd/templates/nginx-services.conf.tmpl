@@ -1,0 +1,53 @@
+{{if ls "/services"}}
+error_log /var/log/nginx/services.log info;
+
+stream {
+    {{if ls "/services/redis"}}
+    upstream redis_pool {
+        {{range gets "/services/redis/*"}}server {{base .Key}}:{{.Value}};
+        {{end}}
+    }
+
+    server {
+        listen 6379;
+        proxy_pass redis_pool;
+        proxy_connect_timeout 2s;
+    }{{end}}
+
+    {{if ls "/services/vlc"}}
+    upstream vlc_pool {
+        zone vlc 64k;
+        {{range gets "/services/vlc/*"}}server {{base .Key}}:{{.Value}};
+        {{end}}
+    }
+
+    server {
+        listen 8080;
+        proxy_pass vlc_pool;
+        proxy_buffer_size 10m;
+        proxy_connect_timeout 2s;
+        proxy_next_upstream on;
+        proxy_next_upstream_timeout 2s;
+        proxy_next_upstream_tries 0;
+    }{{end}}
+
+    {{if ls "/services/vlc"}}
+    upstream tf2_pool {
+        {{range gets "/services/tf2/*"}}server {{base .Key}}:{{.Value}};
+        {{end}}
+    }
+
+    server {
+        listen 27015 udp;
+        proxy_pass tf2_pool;
+        proxy_connect_timeout 2s;
+    }
+
+    server {
+        listen 27015;
+        proxy_pass tf2_pool;
+        proxy_connect_timeout 2s;
+    }{{end}}
+
+}
+{{end}}

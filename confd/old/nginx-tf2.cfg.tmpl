@@ -1,0 +1,16 @@
+{{if ls "/services/tf2"}}
+error_log /var/log/nginx/tf2.log info;
+
+stream {
+    upstream tf2_pool {
+        {{range gets "/services/tf2/*"}}server {{base .Key}}:{{.Value}};
+        {{end}}
+    }
+
+    server {
+        listen 27015;
+        proxy_pass tf2_pool;
+        proxy_connect_timeout 2s;
+    }
+}
+{{end}}

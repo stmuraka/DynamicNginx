@@ -1,0 +1,8 @@
+[template]
+src = "nginx-vlc.cfg.tmpl"
+dest = "/etc/nginx/sites-available/vlc"
+interval = 1
+keys = [
+  "/services/"
+]
+reload_cmd = "[ ! -f /etc/nginx/sites-enabled/vlc ] && ln -s /etc/nginx/sites-available/vlc /etc/nginx/sites-enabled/vlc; /etc/init.d/nginx reload"

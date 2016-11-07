@@ -1,0 +1,8 @@
+[template]
+src = "nginx-redis.cfg.tmpl"
+dest = "/etc/nginx/conf.d/redis.conf"
+interval = 1
+keys = [
+  "/services/"
+]
+reload_cmd = "/etc/init.d/nginx reload"

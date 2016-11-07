@@ -1,0 +1,8 @@
+[template]
+src = "nginx-tf2.cfg.tmpl"
+dest = "/etc/nginx/conf.d/tf2.conf"
+interval = 1
+keys = [
+  "/services/"
+]
+reload_cmd = "/etc/init.d/nginx reload"

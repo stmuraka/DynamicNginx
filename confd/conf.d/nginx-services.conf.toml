@@ -1,0 +1,8 @@
+[template]
+src = "nginx-services.conf.tmpl"
+dest = "/etc/nginx/conf.d/services.conf"
+interval = 1
+keys = [
+  "/services/"
+]
+reload_cmd = "/etc/init.d/nginx reload"
